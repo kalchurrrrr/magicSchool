@@ -40,7 +40,7 @@ public class StudentController {
         return studentService.filterStudentsByAge(age);
     }
     @GetMapping("/")
-    public Map<Long, Student> getAllStudents() {
+    public List<Student> getAllStudents() {
         return studentService.getAllStudents();
     }
 }

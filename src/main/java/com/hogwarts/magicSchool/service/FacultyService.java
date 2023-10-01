@@ -48,7 +48,7 @@ public class FacultyService {
         return facultyRepository.findByColorIgnoreCase(color);
     }
 
-    public Map<Long, Faculty> getAllFaculties() {
-        return facultyRepository.findAllFaculties();
+    public List<Faculty> getAllFaculties() {
+        return facultyRepository.findAll();
     }
 }

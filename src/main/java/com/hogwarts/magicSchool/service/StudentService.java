@@ -49,7 +49,7 @@ public class StudentService {
         return studentRepository.findByAge(age);
     }
 
-    public Map<Long, Student> getAllStudents() {
-        return studentRepository.findAllStudents();
+    public List<Student> getAllStudents() {
+        return studentRepository.findAll();
     }
 }

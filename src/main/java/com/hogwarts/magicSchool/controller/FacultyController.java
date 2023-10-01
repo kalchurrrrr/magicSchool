@@ -41,7 +41,7 @@ public class FacultyController {
         return facultyService.filterFacultiesByColor(color);
     }
     @GetMapping("/")
-    public Map<Long, Faculty> getAllFaculties() {
+    public List<Faculty> getAllFaculties() {
         return facultyService.getAllFaculties();
     }
 }
