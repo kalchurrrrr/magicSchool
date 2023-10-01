@@ -2,60 +2,53 @@ package com.hogwarts.magicSchool.service;
 
 import com.hogwarts.magicSchool.exceptions.CreateFacultyException;
 import com.hogwarts.magicSchool.model.Faculty;
+import com.hogwarts.magicSchool.repository.FacultyRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 @Service
 public class FacultyService {
-    private final Map<Long, Faculty> faculties;
-    private Long counter;
+    private final FacultyRepository facultyRepository;
 
-    public FacultyService() {
-        this.faculties = new HashMap<>();
-        this.counter = 1L;
+    @Autowired
+    public FacultyService(FacultyRepository facultyRepository) {
+        this.facultyRepository = facultyRepository;
     }
 
     public Faculty createFaculty(String name, String color) {
-        for (Faculty faculty : faculties.values()) {
-            if (faculty.getName().equals(name) && faculty.getColor().equals(color)) {
-                throw new CreateFacultyException("Факультет с таким же названием и цветом уже существует");
-            }
+        if (facultyRepository.existsByNameAndColor(name, color)) {
+            throw new CreateFacultyException("Факультет с таким же названием и цветом уже существует");
         }
-        Faculty faculty = new Faculty(counter, name, color);
-        faculties.put(counter, faculty);
-        counter++;
-        return faculty;
+        Faculty faculty = new Faculty();
+        faculty.setName(name);
+        faculty.setColor(color);
+        return facultyRepository.save(faculty);
     }
 
     public Faculty getFacultyById(Long id) {
-        return faculties.get(id);
+        return facultyRepository.findById(id).orElse(null);
     }
 
     public void updateFaculty(Long id, String name, String color) {
-        if (faculties.containsKey(id)) {
-            Faculty faculty = faculties.get(id);
+        Faculty faculty = getFacultyById(id);
+        if (faculty != null) {
             faculty.setName(name);
             faculty.setColor(color);
+            facultyRepository.save(faculty);
         }
     }
 
     public void deleteFaculty(Long id) {
-        faculties.remove(id);
+        facultyRepository.deleteById(id);
     }
+
     public List<Faculty> filterFacultiesByColor(String color) {
-        List<Faculty> filteredFaculties = new ArrayList<>();
-        for (Faculty faculty : faculties.values()) {
-            if (faculty.getColor().equalsIgnoreCase(color)) {
-                filteredFaculties.add(faculty);
-            }
-        }
-        return filteredFaculties;
+        return facultyRepository.findByColorIgnoreCase(color);
     }
+
     public Map<Long, Faculty> getAllFaculties() {
-        return faculties;
+        return facultyRepository.findAllFaculties();
     }
 }
-
