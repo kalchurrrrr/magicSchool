@@ -6,8 +6,7 @@ import com.hogwarts.magicSchool.repository.FacultyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Map;
+import java.util.Collection;
 @Service
 public class FacultyService {
     private final FacultyRepository facultyRepository;
@@ -44,11 +43,18 @@ public class FacultyService {
         facultyRepository.deleteById(id);
     }
 
-    public List<Faculty> filterFacultiesByColor(String color) {
+    public Collection<Faculty> filterFacultiesByColor(String color) {
         return facultyRepository.findByColorIgnoreCase(color);
     }
 
-    public List<Faculty> getAllFaculties() {
+    public Collection<Faculty> getAllFaculties() {
         return facultyRepository.findAll();
+    }
+    public Collection<Faculty> getFacultiesByNameIgnoreCase(String name) {
+        return facultyRepository.findByNameIgnoreCase(name);
+    }
+
+    public Collection<Faculty> getFacultiesByColorIgnoreCase(String color) {
+        return facultyRepository.findByColorIgnoreCase(color);
     }
 }

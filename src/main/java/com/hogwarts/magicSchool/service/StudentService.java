@@ -6,8 +6,7 @@ import com.hogwarts.magicSchool.repository.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Map;
+import java.util.Collection;
 
 @Service
 public class StudentService {
@@ -45,11 +44,14 @@ public class StudentService {
         studentRepository.deleteById(id);
     }
 
-    public List<Student> filterStudentsByAge(int age) {
+    public Collection<Student> filterStudentsByAge(int age) {
         return studentRepository.findByAge(age);
     }
 
-    public List<Student> getAllStudents() {
+    public Collection<Student> getAllStudents() {
         return studentRepository.findAll();
+    }
+    public Collection<Student> getStudentsByAgeRange(int min, int max) {
+        return studentRepository.findByAgeBetween(min, max);
     }
 }
