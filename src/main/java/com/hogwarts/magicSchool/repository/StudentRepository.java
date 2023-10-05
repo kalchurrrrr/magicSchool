@@ -10,6 +10,4 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
     boolean existsByNameAndAge(String name, int age);
 
     List<Student> findByAge(int age);
-
-    List<Student> findAllStudents();
 }
