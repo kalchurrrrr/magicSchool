@@ -30,13 +30,14 @@ public class FacultyService {
         return facultyRepository.findById(id).orElse(null);
     }
 
-    public void updateFaculty(Long id, String name, String color) {
-        Faculty faculty = getFacultyById(id);
+    public Faculty updateFaculty(Long id, String name, String color) {
+        Faculty faculty = facultyRepository.findById(id).orElse(null);
         if (faculty != null) {
             faculty.setName(name);
             faculty.setColor(color);
-            facultyRepository.save(faculty);
+            return facultyRepository.save(faculty);
         }
+        return null;
     }
 
     public void deleteFaculty(Long id) {

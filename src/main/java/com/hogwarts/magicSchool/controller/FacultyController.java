@@ -3,6 +3,7 @@ package com.hogwarts.magicSchool.controller;
 import com.hogwarts.magicSchool.model.Faculty;
 import com.hogwarts.magicSchool.model.Student;
 import com.hogwarts.magicSchool.service.FacultyService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,8 +30,13 @@ public class FacultyController {
     }
 
     @PutMapping("/{id}")
-    public void updateFaculty(@PathVariable Long id, @RequestParam String name, @RequestParam String color) {
-        facultyService.updateFaculty(id, name, color);
+    public ResponseEntity<?> updateFaculty(@PathVariable Long id, @RequestParam String name, @RequestParam String color) {
+        Faculty updatedFaculty = facultyService.updateFaculty(id, name, color);
+        if (updatedFaculty == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } else {
+            return new ResponseEntity<>(updatedFaculty, HttpStatus.OK);
+        }
     }
 
     @DeleteMapping("/{id}")
