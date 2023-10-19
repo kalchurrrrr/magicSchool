@@ -1,10 +1,14 @@
 package com.hogwarts.magicSchool.controller;
 
 import com.hogwarts.magicSchool.model.Avatar;
+import com.hogwarts.magicSchool.repository.AvatarRepository;
 import com.hogwarts.magicSchool.service.AvatarService;
 import com.hogwarts.magicSchool.service.AvatarServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -25,6 +29,8 @@ import java.nio.file.StandardCopyOption;
 @RequestMapping("/avatars")
 public class AvatarController {
     private final AvatarService avatarService;
+    @Autowired
+    private AvatarRepository avatarRepository;
     public AvatarController(AvatarServiceImpl avatarServiceImpl) {
     this.avatarService = avatarServiceImpl;
     }
@@ -57,5 +63,12 @@ public class AvatarController {
             response.setContentLength((int) avatar.getFileSize());
             is.transferTo(os);
         }
+    }
+    @GetMapping("/list")
+    public ResponseEntity<Page<Avatar>> getAllAvatars(@RequestParam(defaultValue = "0") int page,
+                                                      @RequestParam(defaultValue = "10") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Avatar> avatarPage = avatarRepository.findAll(pageable);
+        return ResponseEntity.ok(avatarPage);
     }
 }
