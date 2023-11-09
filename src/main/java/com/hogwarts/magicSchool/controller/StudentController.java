@@ -2,16 +2,21 @@ package com.hogwarts.magicSchool.controller;
 
 import com.hogwarts.magicSchool.model.Faculty;
 import com.hogwarts.magicSchool.model.Student;
+import com.hogwarts.magicSchool.repository.StudentRepository;
 import com.hogwarts.magicSchool.service.StudentService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.LongStream;
 
 @RestController
 @RequestMapping("/student")
 public class StudentController {
     private final StudentService studentService;
+    private StudentRepository studentRepository;
 
     public StudentController(StudentService studentService) {
         this.studentService = studentService;
@@ -63,5 +68,26 @@ public class StudentController {
         }
         return ResponseEntity.ok(faculty);
     }
-
+    @GetMapping("/students/starts-with-a")
+    public List<String> getStudentsNamesStartsWithA() {
+        List<String> studentsNames = studentRepository.findAll().stream()
+                .map(Student::getName)
+                .filter(name -> name.toUpperCase().startsWith("A"))
+                .sorted()
+                .map(String::toUpperCase)
+                .collect(Collectors.toList());
+        return studentsNames;
+    }
+    @GetMapping("/students/average-age")
+    public double getAverageStudentAge() {
+        return studentRepository.findAll().stream()
+                .mapToInt(Student::getAge)
+                .average()
+                .orElse(0.0);
+    }
+    @GetMapping("/calculate-sum")
+    public long calculateSum() {
+        return LongStream.rangeClosed(1, 1_000_000)
+                .reduce(0, Long::sum);
+    }
 }

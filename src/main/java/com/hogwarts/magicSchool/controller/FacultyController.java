@@ -2,18 +2,21 @@ package com.hogwarts.magicSchool.controller;
 
 import com.hogwarts.magicSchool.model.Faculty;
 import com.hogwarts.magicSchool.model.Student;
+import com.hogwarts.magicSchool.repository.FacultyRepository;
 import com.hogwarts.magicSchool.service.FacultyService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
+import java.util.Comparator;
 
 @RestController
 @RequestMapping("/faculty")
 
 public class FacultyController {
     private final FacultyService facultyService;
+    private FacultyRepository facultyRepository;
 
     public FacultyController(FacultyService facultyService) {
         this.facultyService = facultyService;
@@ -69,5 +72,12 @@ public class FacultyController {
         }
         Collection<Student> students = faculty.getStudents();
         return ResponseEntity.ok(students);
+    }
+    @GetMapping("/faculty/longest-name")
+    public String getLongestFacultyName() {
+        return facultyRepository.findAll().stream()
+                .map(Faculty::getName)
+                .max(Comparator.comparing(String::length))
+                .orElse("");
     }
 }
