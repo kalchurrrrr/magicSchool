@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -109,5 +110,48 @@ public class StudentService {
         logger.info("Найдено {} студентов соответствующих диапазону возраста {}-{}", filteredStudents.size(), min, max);
 
         return filteredStudents;
+    }
+    public void printStudentNamesStep1() {
+        List<Student> students = studentRepository.getAll();
+
+        Thread thread1 = new Thread(() -> {
+            System.out.println(students.get(2).getName());
+            System.out.println(students.get(3).getName());
+        });
+
+        Thread thread2 = new Thread(() -> {
+            System.out.println(students.get(4).getName());
+            System.out.println(students.get(5).getName());
+        });
+
+        System.out.println(students.get(0).getName());
+        System.out.println(students.get(1).getName());
+
+        thread1.start();
+        thread2.start();
+    }
+
+    public void printStudentNamesStep2() {
+        List<Student> students = studentRepository.getAll();
+
+        Thread thread1 = new Thread(() -> {
+            printNameSynchronized(students.get(2));
+            printNameSynchronized(students.get(3));
+        });
+
+        Thread thread2 = new Thread(() -> {
+            printNameSynchronized(students.get(4));
+            printNameSynchronized(students.get(5));
+        });
+
+        printNameSynchronized(students.get(0));
+        printNameSynchronized(students.get(1));
+
+        thread1.start();
+        thread2.start();
+    }
+
+    synchronized void printNameSynchronized(Student student) {
+        System.out.println(student.getName());
     }
 }

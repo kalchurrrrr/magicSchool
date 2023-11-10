@@ -90,4 +90,14 @@ public class StudentController {
         return LongStream.rangeClosed(1, 1_000_000)
                 .reduce(0, Long::sum);
     }
+    @GetMapping("/studentNamesStep1")
+    public String getStudentNamesStep1() {
+        studentService.printStudentNamesStep1();
+        return "Проверьте в консоли имена учащихся";
+    }
+    @GetMapping("/studentNamesStep2")
+    public String getStudentNamesStep2() {
+        studentService.printStudentNamesStep2();
+        return "Проверьте в консоли имена учащихся";
+    }
 }

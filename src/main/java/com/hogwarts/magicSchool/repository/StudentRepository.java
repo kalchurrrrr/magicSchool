@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.Collection;
+import java.util.List;
 
 public interface StudentRepository extends JpaRepository<Student, Long> {
     boolean existsByNameAndAge(String name, int age);
@@ -20,4 +21,6 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
     @Query("SELECT AVG(s.age) FROM Student s")
     double getAverageAge();
     Page<Student> findAllByOrderByIdDesc(Pageable pageable);
+
+    List<Student> getAll();
 }
